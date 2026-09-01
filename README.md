@@ -6,7 +6,10 @@ Made by [Marko Njegomir](https://x.com/njmarko) with Grok.
 
 <!-- Add an animated GIF of an exported clip here.
      Save it as docs/demo.gif (or change the path below). -->
-![Juxtaposition DLSS5 demo](docs/demo.gif)
+
+<p align="center">
+  <img src="docs/demo.gif" alt="Juxtaposition DLSS5 demo" width="920">
+</p>
 
 ## What it does
 
