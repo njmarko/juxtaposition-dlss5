@@ -81,7 +81,7 @@ export function LabelChip({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
       className={cn(
-        "absolute select-none touch-none font-sans font-bold leading-none",
+        "absolute grid place-items-center select-none touch-none font-sans font-bold leading-none",
         disabled ? "cursor-default" : "cursor-grab active:cursor-grabbing",
         label.kind === "on" ? "bg-badge-on text-badge-fg" : "bg-badge-off text-badge-fg",
       )}
@@ -94,7 +94,16 @@ export function LabelChip({
         pointerEvents: disabled ? "none" : "auto",
       }}
     >
-      {text}
+      {Object.values(LABEL_TEXT).map((t) => (
+        <span
+          key={t}
+          className="col-start-1 row-start-1 whitespace-nowrap"
+          style={{ visibility: t === text ? "visible" : "hidden" }}
+          aria-hidden={t !== text}
+        >
+          {t}
+        </span>
+      ))}
       {disabled ? null : (
         <span
           aria-hidden="true"

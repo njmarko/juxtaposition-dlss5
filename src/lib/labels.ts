@@ -57,6 +57,23 @@ export function badgeMetrics(canvasH: number, size: number) {
   };
 }
 
+function trackedWidth(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  tracking: number,
+) {
+  return ctx.measureText(text).width + tracking * Math.max(0, text.length - 1);
+}
+
+/** Shared box for every kind so ON / OFF match by default. */
+function maxLabelTextWidth(ctx: CanvasRenderingContext2D, tracking: number) {
+  let max = 0;
+  for (const t of Object.values(LABEL_TEXT)) {
+    max = Math.max(max, trackedWidth(ctx, t, tracking));
+  }
+  return max;
+}
+
 export function measureBadge(
   ctx: CanvasRenderingContext2D,
   kind: LabelKind,
@@ -66,10 +83,12 @@ export function measureBadge(
   const { fontSize, padX, padY, tracking } = badgeMetrics(canvasH, size);
   const text = LABEL_TEXT[kind];
   ctx.font = `700 ${fontSize}px "Figtree", "Noto Sans", sans-serif`;
-  const tw = ctx.measureText(text).width + tracking * Math.max(0, text.length - 1);
+  const textWidth = trackedWidth(ctx, text, tracking);
+  const boxWidth = maxLabelTextWidth(ctx, tracking);
   return {
-    width: tw + padX * 2,
+    width: boxWidth + padX * 2,
     height: fontSize + padY * 2,
+    textWidth,
     fontSize,
     padX,
     padY,
@@ -96,7 +115,7 @@ export function drawBadge(
   ctx.textAlign = "left";
   ctx.textBaseline = "middle";
   const cy = y + m.height / 2;
-  let cx = x + m.padX;
+  let cx = x + (m.width - m.textWidth) / 2;
   for (const ch of m.text) {
     ctx.fillText(ch, cx, cy);
     cx += ctx.measureText(ch).width + m.tracking;
